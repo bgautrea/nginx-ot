@@ -34,7 +34,7 @@ Install NGINX Plus OpenTracing module on N+ Containers
 
 run the jaegertracing/all-in-one:1.10 with the name jaeger
 
-     `docker run -d --network TenNet --name jaeger jaegertracing/all-in-one:1.10 `
+     `docker run -d --network TenNet --name jaeger -p 16686:16686 jaegertracing/all-in-one:1.10 `
    
 
 Copy the jaeger.json to /etc/
