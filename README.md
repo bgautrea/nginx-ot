@@ -9,7 +9,7 @@ Run NGINX Plus containers for backend application and proxy.
 
      `docker run -d --network TenNet --name upstream1 --hostname upstream1 nginx-plus`
 
-     `docker run -d --network TenNet --name upstream2 --hostanme upstream2 nginx-plus`
+     `docker run -d --network TenNet --name upstream2 --hostname upstream2 nginx-plus`
 
      `docker run -d -p 80:80 -p 443:443 -p 8080:8080 --network TenNet --name nginx-plus --hostname nginx-plus nginx-plus`
 
