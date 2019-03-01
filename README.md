@@ -14,11 +14,11 @@ Create a docker network so hostnames work with the built-in docker DNS
 ## Running the containers
 Run NGINX Plus containers for backend application and proxy.
 
-     `docker run -d --network TenNet --name upstream1 --hostname upstream1 nginx-plus`
-
-     `docker run -d --network TenNet --name upstream2 --hostname upstream2 nginx-plus`
-
-     `docker run -d -p 80:80 -p 443:443 -p 8080:8080 --network TenNet --name nginx-plus --hostname nginx-plus nginx-plus`
+```
+     docker run -d --network TenNet --name upstream1 --hostname upstream1 nginx-plus
+     docker run -d --network TenNet --name upstream2 --hostname upstream2 nginx-plus
+     docker run -d -p 80:80 -p 443:443 -p 8080:8080 --network TenNet --name nginx-plus --hostname nginx-plus nginx-plus
+```
 
 ## Push the configurations to each of the containers
 ```
@@ -32,40 +32,51 @@ Run NGINX Plus containers for backend application and proxy.
 ## Install OpenTracing Module
 Install NGINX Plus OpenTracing module on N+ Containers
 
-     `docker exec -ti nginx-plus yum -y install nginx-plus-module-opentracing`
+```
+     docker exec -ti nginx-plus yum -y install nginx-plus-module-opentracing
+     docker exec -ti upstream1 yum -y install nginx-plus-module-opentracing
+     docker exec -ti upstream2 yum -y install nginx-plus-module-opentracing
+```
 
-     `docker exec -ti upstream1 yum -y install nginx-plus-module-opentracing`
-     
-     `docker exec -ti upstream2 yum -y install nginx-plus-module-opentracing`
-
+## Jaeger Install
 run the jaegertracing/all-in-one:1.10 with the name jaeger
 
      `docker run -d --network TenNet --name jaeger -p 16686:16686 jaegertracing/all-in-one:1.10 `
    
 
-Copy the jaeger.json to /etc/
+## Push Jaeger plugin configurations
+Copy and modify the jaeger.json to /etc/
+```
+     docker cp jaeger.json nginx-plus:/etc/jaeger.json
+     docker cp jaeger.json upstream1:/etc/jaeger.json
+     docker cp jaeger.json upstream2:/etc/jaeger.json
+     docker exec -ti upstream1 sed -ie s/nginx/nginx-upstream/ /etc/jaeger.json
+     docker exec -ti upstream2 sed -ie s/nginx/nginx-upstream/ /etc/jaeger.json
+```
 
-     `docker cp jaeger.json nginx-plus:/etc/jaeger.json`
-     
-     `docker cp jaeger.json upstream1:/etc/jaeger.json`
-     
-     `docker cp jaeger.json upstream2:/etc/jaeger.json`
-     
-Copy the lib64/* to /usr/local/lib64
+## Add the C++ Jaeger plugin
+Copy the lib64/ to /usr/local/lib64
 
-     `docker cp lib64/ nginx-plus:/usr/local/`
-     
-     `docker cp lib64/ upstream1:/usr/local/`
-     
-     `docker cp lib64/ upstream2:/usr/local/`
+```
+     docker cp lib64/ nginx-plus:/usr/local/
+     docker cp lib64/ upstream1:/usr/local/
+     docker cp lib64/ upstream2:/usr/local/
+```
 
 
-reload nginx
+## Reload nginx
+```
+     docker exec -ti upstream1 nginx -s reload
+     docker exec -ti upstream2 nginx -s reload
+     docker exec -ti nginx-plus nginx -s reload
+```
 
-     `docker exec -ti upstream1 nginx -s reload`
+## Load generation
+Run some load against the load balancer
+```
+   ab -t 300 http://localhost
+```
 
-     `docker exec -ti upstream2 nginx -s reload`
-
-     `docker exec -ti nginx-plus nginx -s reload`
-
+## Jaeger traces
+Open browser and navigate to the docker host on port 16686
 

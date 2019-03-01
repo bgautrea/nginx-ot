@@ -31,6 +31,10 @@ docker cp jaeger.json nginx-plus:/etc/jaeger.json
 docker cp jaeger.json upstream1:/etc/jaeger.json
      
 docker cp jaeger.json upstream2:/etc/jaeger.json
+
+docker exec -ti upstream1 sed -ei s/nginx/nginx-upstream/ /etc/jaeger.json
+     
+docker exec -ti upstream2 sed -ei s/nginx/nginx-upstream/ /etc/jaeger.json
      
 docker cp lib64/ nginx-plus:/usr/local/
      
