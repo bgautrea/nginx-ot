@@ -8,9 +8,9 @@ Start by building a **CENTOS** nginx-plus container named nginx-plus.
 
 ## Docker setup
 Create a docker network so hostnames work with the built-in docker DNS
-
-     `docker network create --subnet 10.10.220.0/24 TenNet`   
-
+```
+     docker network create --subnet 10.10.220.0/24 TenNet
+```
 ## Running the containers
 Run NGINX Plus containers for backend application and proxy.
 
@@ -74,7 +74,7 @@ Copy the lib64/ to /usr/local/lib64
 ## Load generation
 Run some load against the load balancer
 ```
-   ab -t 300 http://localhost
+   ab -t 300 http://localhost/
 ```
 
 ## Jaeger traces
