@@ -3,7 +3,7 @@ nginx config with opentracing
 
 demo of nginx plus with opentracing - all docker containers. THis will use a custom docker network for name resolution.
 
-`docker network create --subnet 10.10.220.0/24 TenNet`   
+     `docker network create --subnet 10.10.220.0/24 TenNet`   
 
 Run NGINX Plus containers for backend application and proxy.
 
