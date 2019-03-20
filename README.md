@@ -1,6 +1,8 @@
 # nginx-ot
 nginx config with opentracing
 
+![Teaser image](./jaeger-nginx.png)
+
 Demo of nginx plus with the NGINX Plus OpenTracing module. These are all docker containers. 
 
 ## NGINX Plus
